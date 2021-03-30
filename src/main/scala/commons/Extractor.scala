@@ -35,18 +35,13 @@ class Extractor {
 
     val splitDF = dataFrame
       .withColumn("tmp", split(col(firstCol), "\\"+delimiter))
-      .select(trimmedList.indices.map(i => col("tmp").getItem(i).as(trimmedList(i))): _*
+      .select(col("cutoff_date") +: trimmedList.indices.map(i => col("tmp").getItem(i).as(trimmedList(i))): _*
       )
       .withColumn("Index", monotonically_increasing_id)
-    splitDF
-  }
-
-  def joinDataFrames(originalDF: DataFrame, splitDF : DataFrame): Unit = {
-    val df = originalDF.as("df1").join(splitDF.as("df2"), originalDF("Index") === splitDF("Index"))
-      .select("df2.*", "df1.cutoff_date")
       .filter("Index > 0")
       .drop("Index")
-    df.show(10, truncate = false)
+    splitDF.show()
+    splitDF
   }
 
 }

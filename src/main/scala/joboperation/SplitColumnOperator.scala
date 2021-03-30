@@ -17,8 +17,6 @@ object SplitColumnOperator {
     val originalDF = extractor.readCSV(pathInput, delimiter)
     LOGGER.info(s"Split Columns from $originalDF")
     val splitDF = extractor.splitColumn(originalDF , delimiter)
-    LOGGER.info(s"Doing a join with $originalDF and $splitDF")
-    extractor.joinDataFrames(originalDF,splitDF)
     LOGGER.info(s"Stopping Spark")
     extractor.spark.stop()
   }
